@@ -23,6 +23,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+fxmacrodata = ["requests>=2.32,<3", "jsonschema>=4.23,<5"]
 dev = ["pytest", "ruff"]
 
 [project.scripts]
@@ -36,6 +37,7 @@ include = ["alphasift*"]
 
 [tool.setuptools.package-data]
 alphasift = ["strategies/*.yaml"]
+"alphasift.fxmacrodata_context._fxmacrodata_client" = ["*.json", "py.typed", "LICENSE"]
 
 [tool.setuptools.data-files]
 "." = ["SKILL.md", ".env.example", "LICENSE"]

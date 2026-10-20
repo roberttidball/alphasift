@@ -357,3 +357,20 @@ $ python -m pytest -q
 ## License
 
 Apache License 2.0
+
+## Optional macro context
+
+FXMacroData provides sourced economic releases and calendars for the LLM ranking
+step. It does not change stock prices, hard filters or deterministic scores.
+The USD catalogue, history and calendar require no API key, account or card.
+
+```bash
+alphasift screen balanced_alpha --fxmacrodata-request examples/fxmacrodata-usd.json --fxmacrodata-output macro-context.json
+```
+
+The optional `fxmacrodata` extra supplies JSON-schema validation. Additional
+authorized datasets use `FXMACRODATA_API_KEY` or `FXMD_API_KEY` in the environment.
+The [integration guide](docs/fxmacrodata.md) covers discovery, Python use,
+pagination, source metadata and failure handling.
+
+[FXMacroData documentation](https://fxmacrodata.com/documentation/reference?utm_source=github&utm_medium=referral&utm_campaign=alphasift&utm_content=readme).

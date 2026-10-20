@@ -70,6 +70,14 @@ def main():
     sp.add_argument("--max-output", type=int, default=None)
     sp.add_argument("--no-llm", action="store_true", help="不使用 LLM 排序")
     sp.add_argument(
+        "--fxmacrodata-request", action="append", default=None, metavar="JSON_FILE",
+        help="可选 FXMacroData 宏观上下文请求文件，可重复；仅用于 LLM 排序",
+    )
+    sp.add_argument(
+        "--fxmacrodata-output", default=None, metavar="JSON_FILE",
+        help="保存 FXMacroData 原始响应和上下文预览",
+    )
+    sp.add_argument(
         "--context",
         default=None,
         help="传给 LLM 的市场/新闻/主题上下文，不参与硬筛，只用于候选相对排序",
@@ -366,6 +374,22 @@ def main():
 
     if args.command == "screen":
         config = Config.from_env()
+        if args.fxmacrodata_output and not args.fxmacrodata_request:
+            parser.error("--fxmacrodata-output requires --fxmacrodata-request")
+        if args.fxmacrodata_request:
+            if args.no_llm:
+                parser.error("--fxmacrodata-request requires LLM ranking; remove --no-llm")
+            try:
+                from alphasift.fxmacrodata_context import build_context, read_requests, FXMacroDataError
+            except ImportError:
+                parser.error("FXMacroData context requires the optional fxmacrodata extra")
+            try:
+                macro = build_context(read_requests(args.fxmacrodata_request))
+                if args.fxmacrodata_output:
+                    macro.write(args.fxmacrodata_output)
+            except (ValueError, OSError, FXMacroDataError):
+                parser.error("FXMacroData context could not be loaded; check request schemas, credentials and output access")
+            args.context = "\n\n".join(part for part in [args.context, macro.text] if part)
         if args.no_post_analysis and (args.post_analyzer or args.deep_analysis):
             parser.error("--no-post-analysis cannot be combined with --post-analyzer or --deep-analysis")
         post_analyzers = []

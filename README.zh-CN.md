@@ -376,3 +376,17 @@ tushare → sina → efinance → akshare_em → em_datacenter
 ## License
 
 Apache License 2.0
+
+## 可选宏观上下文
+
+FXMacroData 的经济数据与发布日历可用于 LLM 排序，不改变股票行情、硬筛或本地因子分数。
+USD 目录、历史和发布日历无需 API key、注册或信用卡。
+
+```bash
+alphasift screen balanced_alpha --fxmacrodata-request examples/fxmacrodata-usd.json --fxmacrodata-output macro-context.json
+```
+
+可选 `fxmacrodata` extra 提供 JSON Schema 校验。其他授权数据通过环境变量
+`FXMACRODATA_API_KEY` 或 `FXMD_API_KEY` 配置。详见 [使用说明](docs/fxmacrodata.md)。
+
+[FXMacroData 文档](https://fxmacrodata.com/documentation/reference?utm_source=github&utm_medium=referral&utm_campaign=alphasift&utm_content=readme-zh).
